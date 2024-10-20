@@ -2,6 +2,8 @@
   "name": "budget-badger",
   "version": "0.1.0",
   "private": true,
+  "main": "dist/electron.js",
+  "type": "module",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -9,20 +11,22 @@
     "@types/jest": "^27.5.2",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
-    "budget-badger": "file:",
+    "electron-is-dev": "^3.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"npm run start-react\" \"wait-on http://localhost:3000 && npm run electron\"",
+    "start-react": "react-scripts start",
     "build": "react-scripts build",
-    "electron": "tsc && electron",
-    "dev": "concurrently \"npm run start\" \"wait-on http://localhost:3000 && npm run electron\"",
+    "electron": "tsc && electron .",
+    "dev": "concurrently \"npm run start-react\" \"wait-on http://localhost:3000 && npm run electron\"",
     "package": "electron-builder",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postbuild": "cp public/electron.js build/"
   },
   "eslintConfig": {
     "extends": [

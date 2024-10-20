@@ -1,17 +1,28 @@
 import { app, BrowserWindow } from "electron";
+import isDev from "electron-is-dev";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __fileName = fileURLToPath(import.meta.url);
+const __dirName = path.dirname(__fileName);
 
 function createWindow() {
+
     const mainWindow = new BrowserWindow({
         width: 600,
         height: 400,
         webPreferences: {
-            preload: path.join(__dirname, "preload.js"),
-            contextIsolation: true,
+            preload: path.join(__dirName, "preload.js"),
+            contextIsolation: false,
+            nodeIntegration: true,
         }
     });
 
-    mainWindow.loadURL("http://localhost:3000");
+    mainWindow.loadURL(
+        isDev ? 
+        `http://localhost:3000` :
+        `file://${path.join(__dirName, `../build/index.html`)}`
+    )
 }
 
 app.whenReady().then(createWindow);
