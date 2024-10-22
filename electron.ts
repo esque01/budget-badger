@@ -1,9 +1,10 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import isDev from "electron-is-dev";
 import path from "path";
 import { fileURLToPath } from "url";
 import * as dotenv from 'dotenv';
-import sqlite3 from "sqlite3"
+import sqlite3 from "sqlite3";
+
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
@@ -25,6 +26,7 @@ const database = new sqlite3.Database(dbPath, (error: Error | null) => {
     }
 });
 
+
 function createWindow() {
 
     const mainWindow = new BrowserWindow({
@@ -33,7 +35,6 @@ function createWindow() {
         webPreferences: {
             preload: path.join(__dirName, "preload.js"),
             contextIsolation: false,
-            nodeIntegration: true,
         }
     });
 
@@ -55,7 +56,18 @@ function createWindow() {
     });
 }
 
-app.whenReady().then(createWindow);
+ipcMain.on('set-title', (event, title) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+
+    if (win) {
+        win.setTitle(title);
+    }
+});
+
+app.whenReady().then(() => {
+    createWindow();
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();

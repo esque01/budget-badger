@@ -22,7 +22,8 @@
   },
   "include": [
     "src", 
-    "electron.ts"
+    "electron.ts",
+    "preload.ts"
   ],
   "exclude": [
     "node_modules"

@@ -25,9 +25,14 @@ export default function Login() {
         reValidateMode: 'onBlur'
     });
 
+    const changeTitle = () => {
+        const title = "Budget Badger";
+        (window as any).electron.setTitle(title);
+    };
+
     const onSubmit: SubmitHandler<LoginFormValues> = (data: LoginFormValues) => 
     {
-        // TODO: Complete API after successful submition
+        changeTitle();
     }
 
   return (

@@ -16,6 +16,7 @@
     "@types/jest": "^27.5.2",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
+    "axios": "^1.7.7",
     "dotenv": "^16.4.5",
     "electron-is-dev": "^3.0.1",
     "react": "^18.3.1",
@@ -38,7 +39,7 @@
     "package": "electron-builder",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postbuild": "cp public/electron.js build/"
+    "postbuild": "cp public/electron.js build/ && cp src/preload.ts dist/preload.js"
   },
   "eslintConfig": {
     "extends": [
