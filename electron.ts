@@ -1,9 +1,10 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import isDev from "electron-is-dev";
 import path from "path";
 import { fileURLToPath } from "url";
 import * as dotenv from 'dotenv';
-import sqlite3 from "sqlite3"
+import sqlite3 from "sqlite3";
+import axios from "axios";
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
@@ -25,22 +26,23 @@ const database = new sqlite3.Database(dbPath, (error: Error | null) => {
     }
 });
 
+
 function createWindow() {
 
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: isDev ? 1200 : 800,
+        height: isDev ? 800 : 600,
+        title: "Budget Badger",
         webPreferences: {
             preload: path.join(__dirName, "preload.js"),
             contextIsolation: false,
-            nodeIntegration: true,
         }
     });
 
     mainWindow.loadURL(
         isDev ? 
         `http://localhost:3000` :
-        `file://${path.join(__dirName, `../build/index.html`)}`
+        `file://${path.join(__dirName, `../public/index.html`)}`
     );
 
     mainWindow.on('closed', () => {
@@ -53,9 +55,28 @@ function createWindow() {
             }
         })
     });
+
+    mainWindow.webContents.openDevTools({ mode: 'detach' });
 }
 
-app.whenReady().then(createWindow);
+ipcMain.on('login', async (event, data) => {
+   try {
+        const response = await axios.post(`http://localhost:3000/api/v1/login`, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        event.reply('login-response', { success: true, data: response.data });
+   } 
+   catch (error) {
+        console.log('Login Error: ', error);
+        event.reply('login-response', { success: false, error: error });
+   }
+});
+
+app.whenReady().then(() => {
+    createWindow();
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
