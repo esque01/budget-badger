@@ -21,9 +21,10 @@
     "outDir": "./dist"
   },
   "include": [
-    "src", 
+    "src/**/*", 
     "electron.ts",
-    "preload.ts"
+    "preload.ts",
+    "renderer.ts"
   ],
   "exclude": [
     "node_modules"

@@ -5,12 +5,19 @@ import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import axios from 'axios';
 
 
-type LoginFormValues = {
+export type LoginFormValues = {
     email: string;
     password: string;
 };
+
+export type LoginResponse = {
+    success: boolean;
+    data?: any,
+    error?: string;
+}
 
 const loginSchema = yup.object().shape({
     email: yup.string().email().required("Email is required"),
@@ -21,19 +28,30 @@ const loginSchema = yup.object().shape({
 export default function Login() {
 
     const { control, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
+        defaultValues: {
+            email: '',
+            password: ''
+        },
         resolver: yupResolver(loginSchema),
         reValidateMode: 'onBlur'
     });
 
-    const changeTitle = () => {
-        const title = "Budget Badger";
-        (window as any).electron.setTitle(title);
-    };
 
-    const onSubmit: SubmitHandler<LoginFormValues> = (data: LoginFormValues) => 
+    const onSubmit: SubmitHandler<LoginFormValues> = async(data: LoginFormValues) => 
     {
-        changeTitle();
+        await axios.post('http://localhost:5000/api/v1/login', data, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then((response) => {
+            //TODO: Handle Response from API
+        })
+        .catch((error) => {
+            console.log('Response status:', error);            
+        })
     }
+
 
   return (
     <div className='login-container'>
