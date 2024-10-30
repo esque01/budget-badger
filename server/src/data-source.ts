@@ -6,10 +6,12 @@ import { Income } from "./entity/Income";
 import { UserAccount } from "./entity/UserAccount";
 import { SavingAccount } from "./entity/SavingAccount";
 import { CheckingAccount } from "./entity/CheckingAccount";
+import path from "path";
+
 
 export const AppDataSource = new DataSource({
     type: "sqlite",
-    database: "budget-badger.db",
+    database: path.join(__dirname, "../budget-badger.db"),
     synchronize: true,
     logging: false,
     entities: [ User, Expense, Income, UserAccount, SavingAccount, CheckingAccount ],

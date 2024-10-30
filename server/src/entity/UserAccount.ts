@@ -1,18 +1,18 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn } from "typeorm";
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("user_accounts")
 export class UserAccount {
-    @PrimaryColumn()
-    accountId: string;
+    
+    @PrimaryGeneratedColumn("uuid")
+    accountId!: string;
 
     @Column({ nullable: false })
-    userId: string;
+    userId!: string;
 
     @CreateDateColumn({ type: "date", default: () => "CURRENT_DATE" })
     dateCreated!: Date;
 
     constructor(userAccount: Partial<UserAccount>) {
-        this.accountId = userAccount.accountId || '';
-        this.userId = userAccount.userId || '';
+        Object.assign(this, userAccount);
     }
 }
