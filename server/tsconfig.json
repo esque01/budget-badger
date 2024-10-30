@@ -17,6 +17,6 @@
       "skipLibCheck": true,
       
    },
-   "include": ["src/server.ts", "src/entity"],
+   "include": ["src/**/*", "src/entity"],
    "exclude": ["node_modules"]
 }

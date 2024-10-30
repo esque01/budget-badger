@@ -1,15 +1,16 @@
-import { Entity, PrimaryColumn, Column, UpdateDateColumn, CreateDateColumn } from "typeorm";
+import { Entity, Column, UpdateDateColumn, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("checking_accounts")
 export class CheckingAccount {
-    @PrimaryColumn()
-    checkingId: string;
+    
+    @PrimaryGeneratedColumn("uuid")
+    checkingId!: string;
 
     @Column({ nullable: false })
-    accountId: string;
+    accountId!: string;
 
     @Column({ type: 'real', default: 0, nullable: false })
-    balance: number;
+    balance!: number;
 
     @CreateDateColumn({ type: "date", default: () => "CURRENT_DATE" })
     dateCreated!: Date;
@@ -18,8 +19,6 @@ export class CheckingAccount {
     dateModified!: Date;
 
     constructor(checkingAccount: Partial<CheckingAccount>) {
-        this.checkingId = checkingAccount.checkingId || '';
-        this.accountId = checkingAccount.accountId || '';
-        this.balance = checkingAccount.balance || 0;
+        Object.assign(this, checkingAccount);
     }
 }

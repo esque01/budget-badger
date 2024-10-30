@@ -1,25 +1,28 @@
-import { Entity, Column, UpdateDateColumn, CreateDateColumn, PrimaryColumn } from "typeorm"
+import { Entity, Column, UpdateDateColumn, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity("users")
 export class User {
 
-    @PrimaryColumn()
-    userId: string;
+    @PrimaryGeneratedColumn("uuid")
+    userId!: string;
 
     @Column({ nullable: false })
-    firstName: string
+    firstName!: string
 
     @Column({ nullable: false })
-    lastName: string
+    lastName!: string
+
+    @Column({ nullable: true })
+    middleName?: string
 
     @Column({ nullable: false })
-    emailAddress: string;
+    emailAddress!: string;
 
     @Column({ nullable: false })
-    phoneNumber: string;
+    phoneNumber!: string;
 
     @Column({ nullable: false })
-    password: string;
+    password!: string;
 
     @CreateDateColumn({ type: "date", default: () => "CURRENT_DATE" })
     dateCreated!: Date;
@@ -27,13 +30,7 @@ export class User {
     @UpdateDateColumn({ type: "date", default: () => "CURRENT_DATE" })
     dateModified!: Date; 
 
-
     constructor(user: Partial<User>) {
-        this.userId = user.userId || '';
-        this.firstName = user.firstName || '';
-        this.lastName = user.lastName || '';
-        this.emailAddress = user.emailAddress || '';
-        this.phoneNumber = user.phoneNumber || '';
-        this.password = user.password || '';
+        Object.assign(this, user);
     }
 };

@@ -5,6 +5,7 @@ import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import axios from "axios";
 
 
 type SignupFormValues = {
@@ -32,13 +33,21 @@ export default function CreateAccount() {
         reValidateMode: 'onBlur'
     });
 
-
-    const onSubmit: SubmitHandler<SignupFormValues> = (data: SignupFormValues) => 
+    const onSubmit: SubmitHandler<SignupFormValues> = async(data: SignupFormValues) => 
     {
-        //TODO: Complete API for User Signup
+        const response = await axios.post(`http://localhost:5000/api/v1/signup`, { data }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.status === 201)
+        {
+            console.log(response.data);
+        }
     }
 
-
+    
   return (
     <div className='create-account-container'>
         <CssBaseline/>

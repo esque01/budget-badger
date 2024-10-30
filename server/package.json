@@ -12,6 +12,8 @@
       "typescript": "4.5.2"
    },
    "dependencies": {
+      "@types/bcrypt": "^5.0.2",
+      "bcrypt": "^5.1.1",
       "budget-badger-server": "file:",
       "cors": "^2.8.5",
       "dotenv": "^16.4.5",
@@ -26,7 +28,8 @@
       "build": "tsc",
       "start": "node dist/server.js",
       "test": "echo \"Error: no test specified\" && exit 1",
-      "dev": "nodemon src/server.ts",
+      "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/server.ts",
+      "watch": "tsc --watch",
       "prod": "nodemon dist/server.js",
       "typeorm": "typeorm-ts-node-commonjs"
    }

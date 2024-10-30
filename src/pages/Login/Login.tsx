@@ -27,7 +27,7 @@ const loginSchema = yup.object().shape({
 
 export default function Login() {
 
-    const { control, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
+    const { control, handleSubmit, formState: { errors }, setError } = useForm<LoginFormValues>({
         defaultValues: {
             email: '',
             password: ''
@@ -35,7 +35,6 @@ export default function Login() {
         resolver: yupResolver(loginSchema),
         reValidateMode: 'onBlur'
     });
-
 
     const onSubmit: SubmitHandler<LoginFormValues> = async(data: LoginFormValues) => 
     {
@@ -45,9 +44,13 @@ export default function Login() {
             }
         })
         .then((response) => {
-            //TODO: Handle Response from API
+            console.log(response.data);
         })
         .catch((error) => {
+            if (error.response.data.message === 'Invalid password')
+            {
+                setError("password", { message: "Invalid password" });
+            }
             console.log('Response status:', error);            
         })
     }
