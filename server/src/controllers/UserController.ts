@@ -80,7 +80,7 @@ const signup = async(req: Request, res: Response, next: NextFunction): Promise<v
                         }
                     ])
                     .execute();
-                
+
                 if (!insertResult || !insertResult.identifiers.length) {
                     return res.status(409).send();
                 }
@@ -97,7 +97,6 @@ const signup = async(req: Request, res: Response, next: NextFunction): Promise<v
 
                 const savedChecking = await entityManager.save(newChecking);
                 const savedSaving = await entityManager.save(newSaving);
-
 
                 const newAccount: UserAccount = new UserAccount({
                     userId: userId,
@@ -136,27 +135,27 @@ const account = async(req: Request, res: Response, next: NextFunction): Promise<
         const { userId } = req.params;
 
         await AppDataSource
-        .getRepository(User)
-        .findOne({
-            where: {
-                userId
-            },
-            select: [
-                "userId",
-                "firstName",
-                "lastName",
-                "middleName",
-                "emailAddress",
-                "phoneNumber",
-            ]
-    
-        })
-        .then((result: User | null) => {
-            if (!result) {
-                return res.status(404).json({ message: "User not found" }); 
-            }   
-            return res.status(200).json({ user: result });
-        });
+            .getRepository(User)
+            .findOne({
+                where: {
+                    userId
+                },
+                select: [
+                    "userId",
+                    "firstName",
+                    "lastName",
+                    "middleName",
+                    "emailAddress",
+                    "phoneNumber",
+                ]
+        
+            })
+            .then((result: User | null) => {
+                if (!result) {
+                    return res.status(404).json({ message: "User not found" }); 
+                }   
+                return res.status(200).json({ user: result });
+            });
     } 
     catch (error) {
         next(error);
