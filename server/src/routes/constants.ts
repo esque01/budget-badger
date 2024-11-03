@@ -14,6 +14,15 @@ export const IncomeRoutes = {
 };
 
 
+export const AccountRoutes = {
+    createAccount: '/users/accounts',
+    getAccount:    '/users/accounts/:accountId',
+    updateAccount: '/users/accounts/:accountId',
+    deleteAcount:  '/users/accounts/:accountId',
+    getAccounts:   '/users/accounts'
+};
+
+
 export const ExpenseRoutes = {
     getExpense:    '/users/:userId/expenses/:expenseId',
     updateExpense: '/users/:userId/expenses/:expenseId',

@@ -1,4 +1,7 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Entity, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, JoinColumn} from "typeorm";
+import { CheckingAccount } from "./CheckingAccount";
+import { SavingAccount } from "./SavingAccount";
+import { User } from "./User";
 
 @Entity("user_accounts")
 export class UserAccount {
@@ -6,14 +9,17 @@ export class UserAccount {
     @PrimaryGeneratedColumn("uuid")
     accountId!: string;
 
-    @Column({ nullable: false })
-    userId!: string;
+    @ManyToOne(() => User, user => user.userId, { nullable: false })
+    @JoinColumn({ name: "userId"})
+    user!: User;
 
-    @Column({ nullable: false })
-    checkingId!: string;
+    @ManyToOne(() => CheckingAccount, checkingAccount => checkingAccount.checkingId, { nullable: false })
+    @JoinColumn({ name: "checkingAccountId"})
+    checkingAccount!: CheckingAccount;
 
-    @Column({ nullable: false })
-    savingId!: string;
+    @ManyToOne(() => SavingAccount, savingAccount => savingAccount.savingId, { nullable: false })
+    @JoinColumn({ name: "savingAccountId"})
+    savingAccount!: SavingAccount;
 
     @CreateDateColumn({ type: "date", default: () => "CURRENT_DATE" })
     dateCreated!: Date;

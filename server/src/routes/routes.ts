@@ -1,7 +1,8 @@
 import express, { Router } from "express";
-import { ExpenseRoutes, UserRoutes } from "./constants";
+import { AccountRoutes, ExpenseRoutes, UserRoutes } from "./constants";
 import { login, signup, account, updateAccount } from "../controllers/UserController";
 import { createExpense, deleteExpense, getExpense, getExpenses, updateExpense } from "../controllers/ExpenseController";
+import { createAccount, deleteAccount, getAccount, getAccounts } from "../controllers/AccountController";
 
 
 const router: Router = express.Router();
@@ -16,5 +17,10 @@ router.get(ExpenseRoutes.getExpense, getExpense);
 router.put(ExpenseRoutes.updateExpense, updateExpense);
 router.delete(ExpenseRoutes.deleteExpense, deleteExpense);
 router.get(ExpenseRoutes.getExpenses, getExpenses);
+
+router.post(AccountRoutes.createAccount, createAccount);
+router.get(AccountRoutes.getAccount, getAccount);
+router.delete(AccountRoutes.deleteAcount, deleteAccount);
+router.get(AccountRoutes.getAccounts, getAccounts);
 
 export default router;

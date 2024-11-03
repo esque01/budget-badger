@@ -1,4 +1,4 @@
-import { Entity, Column, UpdateDateColumn, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, UpdateDateColumn, CreateDateColumn, PrimaryGeneratedColumn, DeleteDateColumn } from "typeorm";
 
 @Entity("expenses")
 export class Expense {
@@ -28,8 +28,11 @@ export class Expense {
     dateCreated!: Date;
 
     @UpdateDateColumn({ type: "date", default: () => "CURRENT_DATE" })
-    dateModified!: Date; 
+    dateModified!: Date;
 
+    @DeleteDateColumn({ nullable: true })
+    deletedAt?: Date | null;
+    
     constructor(expense: Partial<Expense>) {
         Object.assign(this, expense);
     }
