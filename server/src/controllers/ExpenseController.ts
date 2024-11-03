@@ -108,9 +108,9 @@ const deleteExpense = async (req: Request, res: Response, next: NextFunction) =>
         const { expenseId } = req.body;
 
         await AppDataSource
+            .getRepository(Expense)
             .createQueryBuilder()
-            .delete()
-            .from(Expense)
+            .softDelete()
             .where("expenseId = :expenseId", { expenseId })
             .execute()
             .then((value: DeleteResult) => {

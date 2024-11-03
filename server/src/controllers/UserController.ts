@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { User } from '../entity/User';
 import bcrypt from "bcrypt";
-import { EntityManager, InsertResult, UpdateResult } from 'typeorm';
+import { EntityManager, UpdateResult } from 'typeorm';
 import { AppDataSource } from "../data-source";
 import { UserAccount } from "../entity/UserAccount";
 import { CheckingAccount } from "../entity/CheckingAccount";
@@ -65,27 +65,16 @@ const signup = async(req: Request, res: Response, next: NextFunction): Promise<v
         await AppDataSource
             .transaction(async(entityManager: EntityManager) => {
 
-               const insertResult: InsertResult = await entityManager
-                    .createQueryBuilder()
-                    .insert()
-                    .into(User)
-                    .values([
-                        {
-                            firstName: firstName, 
-                            lastName: lastName,
-                            middleName: middleName,
-                            emailAddress: emailAddress,
-                            phoneNumber: phoneNumber,
-                            password: hashedPassword
-                        }
-                    ])
-                    .execute();
-
-                if (!insertResult || !insertResult.identifiers.length) {
-                    return res.status(409).send();
-                }
-
-                const userId = insertResult.identifiers[0].userId;
+                const newUser: User = new User({
+                    firstName, 
+                    lastName,
+                    middleName,
+                    emailAddress,
+                    phoneNumber,
+                    password: hashedPassword
+                });
+    
+                const savedUser = await entityManager.save(newUser);
 
                 const newChecking: CheckingAccount = new CheckingAccount({
                     balance: 0.00
@@ -99,9 +88,9 @@ const signup = async(req: Request, res: Response, next: NextFunction): Promise<v
                 const savedSaving = await entityManager.save(newSaving);
 
                 const newAccount: UserAccount = new UserAccount({
-                    userId: userId,
-                    savingId: savedSaving.savingId,
-                    checkingId: savedChecking.checkingId
+                    user: savedUser,
+                    savingAccount: savedSaving,
+                    checkingAccount: savedChecking,
                 });
  
                 await entityManager.save(newAccount);
@@ -110,7 +99,7 @@ const signup = async(req: Request, res: Response, next: NextFunction): Promise<v
                     .getRepository(User)
                     .findOne({
                         where: {
-                            userId: userId,
+                            userId: newAccount.user.userId,
                         },
                         select: [
                             "firstName",
@@ -189,6 +178,5 @@ const updateAccount = async(req: Request, res: Response, next: NextFunction) => 
         next(error);
    }
 }
-
 
 export { signup, login, account, updateAccount };
