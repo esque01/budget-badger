@@ -43,8 +43,8 @@ const createAccount = async (req: Request, res: Response, next: NextFunction): P
                 const savedSaving = await entityManager.save(newSaving);
 
                 const userAccount: UserAccount =  new UserAccount({
-                    checkingAccount: savedChecking,
-                    savingAccount: savedSaving,
+                    checkingAccounts: [savedChecking],
+                    savingAccounts: [savedSaving],
                     user: savedUser
                 });
 

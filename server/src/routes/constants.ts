@@ -33,19 +33,19 @@ export const ExpenseRoutes = {
 
 
 export const CheckingRoutes = {
-    getChecking:    '/users/:userId/account/:accountId/checkings/:checkingId',
-    updateChecking: '/users/:userId/account/:accountId/checkings/:checkingId',
-    deleteChecking: '/users/:userId/account/:accountId/checkings/:checkingId',
-    createChecking: '/users/:userId/account/:accountId/checkings',
-    getCheckings:   '/users/:userId/account/:accountId/checkings'
+    getChecking:    '/users/:userId/accounts/:accountId/checkings/:checkingId',
+    updateChecking: '/users/:userId/accounts/:accountId/checkings/:checkingId',
+    deleteChecking: '/users/:userId/accounts/:accountId/checkings/:checkingId',
+    createChecking: '/users/:userId/accounts/:accountId/checkings',
+    getCheckings:   '/users/:userId/accounts/:accountId/checkings'
 };
 
 
 export const SavingRoutes = {
-    getChecking:    '/users/:userId/account/:accountId/savings/:savingId',
-    updateChecking: '/users/:userId/account/:accountId/savings/:savingId',
-    deleteChecking: '/users/:userId/account/:accountId/savings/:savingId',
-    createChecking: '/users/:userId/account/:accountId/savings',
-    getCheckings:   '/users/:userId/account/:accountId/savings'
+    getSaving:    '/users/:userId/accounts/:accountId/savings/:savingId',
+    updateSaving: '/users/:userId/accounts/:accountId/savings/:savingId',
+    deleteSaving: '/users/:userId/accounts/:accountId/savings/:savingId',
+    createSaving: '/users/:userId/accounts/:accountId/savings',
+    getSavings:   '/users/:userId/accounts/:accountId/savings'
 };
 
