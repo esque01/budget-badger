@@ -1,0 +1,36 @@
+{
+   "name": "budget-badger-server",
+   "version": "0.0.1",
+   "description": "",
+   "type": "commonjs",
+   "main": "dist/server.js",
+   "devDependencies": {
+      "@types/cors": "^2.8.17",
+      "@types/express": "^5.0.0",
+      "@types/node": "^16.11.10",
+      "ts-node": "10.9.1",
+      "typescript": "4.5.2"
+   },
+   "dependencies": {
+      "@types/bcrypt": "^5.0.2",
+      "bcrypt": "^5.1.1",
+      "budget-badger-server": "file:",
+      "cors": "^2.8.5",
+      "dotenv": "^16.4.5",
+      "express": "^4.21.1",
+      "nodemon": "^3.1.7",
+      "reflect-metadata": "^0.1.13",
+      "server": "file:",
+      "sqlite3": "^5.1.7",
+      "typeorm": "0.3.20"
+   },
+   "scripts": {
+      "build": "tsc",
+      "start": "node dist/server.js",
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/server.ts",
+      "watch": "tsc --watch",
+      "prod": "nodemon dist/server.js",
+      "typeorm": "typeorm-ts-node-commonjs"
+   }
+}

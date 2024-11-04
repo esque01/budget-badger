@@ -18,11 +18,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "outDir": "./dist"
+    "outDir": "./dist",
   },
   "include": [
-    "src", 
-    "electron.ts"
+    "src/**/*", 
+    "electron.ts",
+    "preload.ts",
+    "renderer.ts"
   ],
   "exclude": [
     "node_modules"
