@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { AppDataSource } from "../data-source";
 import { UserAccount } from "../entity/UserAccount";
-import { EntityManager, IsNull, Not, UpdateResult, } from "typeorm";
+import { EntityManager, IsNull, UpdateResult, } from "typeorm";
 import { User } from "../entity/User";
 import { SavingAccount } from "../entity/SavingAccount";
 import { CheckingAccount } from "../entity/CheckingAccount";

@@ -20,7 +20,7 @@ const getExpense = async (req: Request, res: Response, next: NextFunction) => {
                 if (!value) {
                     return res.status(404).json({ message: "Expense not found" }); 
                 }
-                return res.status(404).json({ expense: value }); 
+                return res.status(200).json({ expense: value }); 
             });
     } catch (error) {
         next(error);
@@ -64,7 +64,7 @@ const createExpense = async (req: Request, res: Response, next: NextFunction): P
             })
             .then((value: Expense | null) => {
                 if (!value) {
-                    return res.status(201).json({ message: 'Expense not found' });
+                    return res.status(404).json({ message: 'Expense not found' });
                 }
                 return res.status(201).json({ expense: value });
             });
@@ -94,7 +94,7 @@ const updateExpense = async (req: Request, res: Response, next: NextFunction) =>
                 if (!value){
                     return res.status(409).send();
                 }
-                res.status(204).json({});
+                res.status(204).send();
             });
     } 
     catch (error) {
