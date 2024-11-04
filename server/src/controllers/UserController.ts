@@ -89,8 +89,8 @@ const signup = async(req: Request, res: Response, next: NextFunction): Promise<v
 
                 const newAccount: UserAccount = new UserAccount({
                     user: savedUser,
-                    savingAccount: savedSaving,
-                    checkingAccount: savedChecking,
+                    savingAccounts: [savedSaving],
+                    checkingAccounts: [savedChecking],
                 });
  
                 await entityManager.save(newAccount);
