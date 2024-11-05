@@ -1,10 +1,11 @@
 import express, { Router } from "express";
-import { AccountRoutes, ExpenseRoutes, IncomeRoutes, SavingRoutes, UserRoutes } from "./constants";
+import { AccountRoutes, CheckingRoutes, ExpenseRoutes, IncomeRoutes, SavingRoutes, UserRoutes } from "./constants";
 import { login, signup, account, updateAccount } from "../controllers/UserController";
 import { createExpense, deleteExpense, getExpense, getExpenses, updateExpense } from "../controllers/ExpenseController";
 import { createAccount, deleteAccount, getAccount, getAccounts } from "../controllers/AccountController";
 import { createIncome, deleteIncome, getIncome, getIncomes, updateIncome } from "../controllers/IncomeController";
 import { createSaving, deleteSaving, getSaving, getSavings, updateSaving } from "../controllers/SavingController";
+import { createChecking, deleteChecking, getChecking, getCheckings, updateChecking } from "../controllers/CheckingController";
 
 
 const router: Router = express.Router();
@@ -37,5 +38,10 @@ router.get(SavingRoutes.getSavings, getSavings);
 router.put(SavingRoutes.updateSaving, updateSaving);
 router.delete(SavingRoutes.deleteSaving, deleteSaving);
 
+router.get(CheckingRoutes.getChecking, getChecking);
+router.get(CheckingRoutes.getCheckings, getCheckings);
+router.post(CheckingRoutes.createChecking, createChecking);
+router.put(CheckingRoutes.updateChecking, updateChecking);
+router.delete(CheckingRoutes.deleteChecking, deleteChecking);
 
 export default router;

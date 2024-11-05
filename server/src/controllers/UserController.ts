@@ -77,10 +77,12 @@ const signup = async(req: Request, res: Response, next: NextFunction): Promise<v
                 const savedUser = await entityManager.save(newUser);
 
                 const newChecking: CheckingAccount = new CheckingAccount({
+                    name: "primary",
                     balance: 0.00
                 });
 
                 const newSaving: SavingAccount = new SavingAccount({
+                    name: "primary",
                     balance: 0.00
                 });
 
