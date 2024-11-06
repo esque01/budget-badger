@@ -138,6 +138,8 @@ const account = async(req: Request, res: Response, next: NextFunction): Promise<
                     "middleName",
                     "emailAddress",
                     "phoneNumber",
+                    "dateCreated",
+                    "role"
                 ]
         
             })
