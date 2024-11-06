@@ -1,4 +1,9 @@
-import { Entity, Column, UpdateDateColumn, CreateDateColumn, PrimaryGeneratedColumn, DeleteDateColumn } from "typeorm"
+import { Entity, Column, UpdateDateColumn, CreateDateColumn, PrimaryGeneratedColumn, DeleteDateColumn } from "typeorm";
+
+export enum Role {
+    ADMIN = "admin",
+    USER = "user",
+};
 
 @Entity("users")
 export class User {
@@ -23,6 +28,9 @@ export class User {
 
     @Column({ nullable: false })
     password!: string;
+
+    @Column({ type: "text", enum: Role, default: Role.USER, nullable: false})
+    role!: Role;
 
     @CreateDateColumn({ type: "date", default: () => "CURRENT_DATE" })
     dateCreated!: Date;
