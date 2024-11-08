@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AppDataSource } from "../data-source";
+import { appDataSource } from "../data-source";
 import { Expense } from "../entity/Expense";
 import { DeleteResult, InsertResult, UpdateResult } from "typeorm";
 
@@ -9,7 +9,7 @@ const getExpense = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { expenseId } = req.body;
 
-        await AppDataSource
+        await appDataSource
             .getRepository(Expense)
             .findOne({
                 where: {
@@ -35,7 +35,7 @@ const createExpense = async (req: Request, res: Response, next: NextFunction): P
         
         let expenseId: string =  "";
 
-        await AppDataSource
+        await appDataSource
             .createQueryBuilder()
             .insert()
             .into(Expense)
@@ -55,7 +55,7 @@ const createExpense = async (req: Request, res: Response, next: NextFunction): P
                 expenseId = value.identifiers[0].expenseId;
             });
             
-        await AppDataSource
+        await appDataSource
             .getRepository(Expense)
             .findOne({
                 where: {
@@ -79,7 +79,7 @@ const updateExpense = async (req: Request, res: Response, next: NextFunction) =>
     try {
         const { expenseId, amount, description, category, paymentMethod } = req.body;
         
-        await AppDataSource
+        await appDataSource
             .createQueryBuilder()
             .update(Expense)
             .set({
@@ -107,7 +107,7 @@ const deleteExpense = async (req: Request, res: Response, next: NextFunction) =>
     try {
         const { expenseId } = req.body;
 
-        await AppDataSource
+        await appDataSource
             .getRepository(Expense)
             .createQueryBuilder()
             .softDelete()
@@ -131,7 +131,7 @@ const getExpenses = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { userId } = req.body;
 
-        await AppDataSource
+        await appDataSource
             .getRepository(Expense)
             .find({
                 where: {

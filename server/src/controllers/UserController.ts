@@ -2,10 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import { User } from '../entity/User';
 import bcrypt from "bcrypt";
 import { EntityManager, UpdateResult } from 'typeorm';
-import { AppDataSource } from "../data-source";
+import { appDataSource } from "../data-source";
 import { UserAccount } from "../entity/UserAccount";
 import { CheckingAccount } from "../entity/CheckingAccount";
 import { SavingAccount } from "../entity/SavingAccount";
+import { generateToken } from "../utils/token-helper";
 
 
 const SALT_ROUNDS: number = 10;
@@ -17,7 +18,7 @@ const login = async(req: Request, res: Response, next: NextFunction): Promise<vo
         
         let userPassword: string | null = null;
 
-        await AppDataSource
+        await appDataSource
             .getRepository(User)
             .findOne({
                 where: {
@@ -62,7 +63,7 @@ const signup = async(req: Request, res: Response, next: NextFunction): Promise<v
         const salt: string = await bcrypt.genSalt(SALT_ROUNDS);
         const hashedPassword: string = await bcrypt.hash(password, salt);
 
-        await AppDataSource
+        await appDataSource
             .transaction(async(entityManager: EntityManager) => {
 
                 const newUser: User = new User({
@@ -104,6 +105,7 @@ const signup = async(req: Request, res: Response, next: NextFunction): Promise<v
                             userId: newAccount.user.userId,
                         },
                         select: [
+                            "userId",
                             "firstName",
                             "lastName",
                             "middleName",
@@ -111,8 +113,10 @@ const signup = async(req: Request, res: Response, next: NextFunction): Promise<v
                             "phoneNumber"
                         ]
                     });
+
+                const token: string = generateToken(user!);
                     
-                return res.status(201).json({ user: user });
+                return res.status(201).json({ user: user, token: token });
             });
     } 
     catch (error) {
@@ -125,7 +129,7 @@ const account = async(req: Request, res: Response, next: NextFunction): Promise<
     try {
         const { userId } = req.params;
 
-        await AppDataSource
+        await appDataSource
             .getRepository(User)
             .findOne({
                 where: {
@@ -140,8 +144,7 @@ const account = async(req: Request, res: Response, next: NextFunction): Promise<
                     "phoneNumber",
                     "dateCreated",
                     "role"
-                ]
-        
+                ]    
             })
             .then((result: User | null) => {
                 if (!result) {
@@ -160,7 +163,7 @@ const updateAccount = async(req: Request, res: Response, next: NextFunction) => 
    try {
         const { userId, firstName, lastName, middleName, phoneNumber } = req.body;
         
-        await AppDataSource
+        await appDataSource
         .createQueryBuilder()
         .update(User)
         .set({

@@ -6,42 +6,43 @@ import { createAccount, deleteAccount, getAccount, getAccounts } from "../contro
 import { createIncome, deleteIncome, getIncome, getIncomes, updateIncome } from "../controllers/IncomeController";
 import { createSaving, deleteSaving, getSaving, getSavings, updateSaving } from "../controllers/SavingController";
 import { createChecking, deleteChecking, getChecking, getCheckings, updateChecking } from "../controllers/CheckingController";
+import { authRequired } from "../middleware/auth";
 
 
 const router: Router = express.Router();
 
 router.post(UserRoutes.signup, signup);
-router.get(UserRoutes.account, account);
+router.get(UserRoutes.account, authRequired, account);
 router.post(UserRoutes.login, login);
-router.put(UserRoutes.account, updateAccount);
+router.put(UserRoutes.account, authRequired, updateAccount);
 
-router.post(ExpenseRoutes.createExpense, createExpense);
-router.get(ExpenseRoutes.getExpense, getExpense);
-router.put(ExpenseRoutes.updateExpense, updateExpense);
-router.delete(ExpenseRoutes.deleteExpense, deleteExpense);
-router.get(ExpenseRoutes.getExpenses, getExpenses);
+router.post(ExpenseRoutes.createExpense, authRequired, createExpense);
+router.get(ExpenseRoutes.getExpense, authRequired, getExpense);
+router.put(ExpenseRoutes.updateExpense, authRequired, updateExpense);
+router.delete(ExpenseRoutes.deleteExpense, authRequired, deleteExpense);
+router.get(ExpenseRoutes.getExpenses, authRequired, getExpenses);
 
 router.post(AccountRoutes.createAccount, createAccount);
-router.get(AccountRoutes.getAccount, getAccount);
+router.get(AccountRoutes.getAccount, authRequired, getAccount);
 router.delete(AccountRoutes.deleteAcount, deleteAccount);
 router.get(AccountRoutes.getAccounts, getAccounts);
 
-router.get(IncomeRoutes.getIncome, getIncome);
-router.get(IncomeRoutes.getIncomes, getIncomes);
-router.post(IncomeRoutes.createIncome, createIncome);
-router.delete(IncomeRoutes.deleteIncome, deleteIncome);
-router.put(IncomeRoutes.updateIncome, updateIncome);
+router.get(IncomeRoutes.getIncome, authRequired, getIncome);
+router.get(IncomeRoutes.getIncomes,authRequired, getIncomes);
+router.post(IncomeRoutes.createIncome, authRequired, createIncome);
+router.delete(IncomeRoutes.deleteIncome, authRequired, deleteIncome);
+router.put(IncomeRoutes.updateIncome, authRequired, updateIncome);
 
-router.post(SavingRoutes.createSaving, createSaving);
-router.get(SavingRoutes.getSaving, getSaving);
-router.get(SavingRoutes.getSavings, getSavings);
-router.put(SavingRoutes.updateSaving, updateSaving);
-router.delete(SavingRoutes.deleteSaving, deleteSaving);
+router.post(SavingRoutes.createSaving, authRequired, createSaving);
+router.get(SavingRoutes.getSaving, authRequired, getSaving);
+router.get(SavingRoutes.getSavings, authRequired, getSavings);
+router.put(SavingRoutes.updateSaving, authRequired, updateSaving);
+router.delete(SavingRoutes.deleteSaving, authRequired, deleteSaving);
 
-router.get(CheckingRoutes.getChecking, getChecking);
-router.get(CheckingRoutes.getCheckings, getCheckings);
+router.get(CheckingRoutes.getChecking, authRequired, getChecking);
+router.get(CheckingRoutes.getCheckings, authRequired, getCheckings);
 router.post(CheckingRoutes.createChecking, createChecking);
-router.put(CheckingRoutes.updateChecking, updateChecking);
+router.put(CheckingRoutes.updateChecking, authRequired, updateChecking);
 router.delete(CheckingRoutes.deleteChecking, deleteChecking);
 
 export default router;
