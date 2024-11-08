@@ -9,7 +9,7 @@ import { CheckingAccount } from "./entity/CheckingAccount";
 import path from "path";
 
 
-export const AppDataSource = new DataSource({
+export const appDataSource = new DataSource({
     type: "sqlite",
     database: path.join(__dirname, "../budget-badger.db"),
     synchronize: true,

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AppDataSource } from "../data-source";
+import { appDataSource } from "../data-source";
 import { SavingAccount } from "../entity/SavingAccount";
 import { DeleteResult, InsertResult, UpdateResult } from "typeorm";
 import { UserAccount } from "../entity/UserAccount";
@@ -11,7 +11,7 @@ const createSaving = async (req: Request, res: Response, next: NextFunction) => 
 
         let savingId: string = '';
 
-        const userAccount: UserAccount | null = await AppDataSource
+        const userAccount: UserAccount | null = await appDataSource
             .getRepository(UserAccount)
             .findOne({
                 where: {
@@ -23,7 +23,7 @@ const createSaving = async (req: Request, res: Response, next: NextFunction) => 
             res.status(404).json({ message: "Account not found" });
         }
 
-        await AppDataSource
+        await appDataSource
             .createQueryBuilder()
             .insert()
             .into(SavingAccount)
@@ -40,7 +40,7 @@ const createSaving = async (req: Request, res: Response, next: NextFunction) => 
                 savingId = value.identifiers[0].savingId;
             });
 
-        await AppDataSource
+        await appDataSource
             .getRepository(SavingAccount)
             .findOne({
                 where: {
@@ -64,7 +64,7 @@ const getSaving = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { savingId } = req.body;
 
-        await AppDataSource
+        await appDataSource
             .getRepository(SavingAccount)
             .findOne({
                 where: {
@@ -88,7 +88,7 @@ const deleteSaving = async (req: Request, res: Response, next: NextFunction) => 
     try {
         const { savingId } = req.body;
 
-        await AppDataSource
+        await appDataSource
             .createQueryBuilder()
             .softDelete()
             .from(SavingAccount)
@@ -112,7 +112,7 @@ const updateSaving = async (req: Request, res: Response, next: NextFunction) => 
     try {
         const { savingId, name, balance, deletedAt } = req.body;    
 
-        await AppDataSource
+        await appDataSource
             .createQueryBuilder()
             .update(SavingAccount)
             .set({
@@ -139,7 +139,7 @@ const getSavings = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { accountId } = req.body; 
         
-        await AppDataSource
+        await appDataSource
             .getRepository(UserAccount)
             .findOne({
                 where: {

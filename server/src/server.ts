@@ -1,8 +1,9 @@
 import express, { Express } from 'express';
-import { AppDataSource } from "./data-source"; 
+import { appDataSource } from "./data-source"; 
 import dotenv from "dotenv";
 import cors from "cors";
 import router from './routes/routes';
+import { generateRSAKeyPair } from './utils/crypto-helper';
 
 dotenv.config();
 
@@ -15,9 +16,11 @@ app.use(express.json());
 
 app.use('/api/v1', router);
 
+generateRSAKeyPair();
+
 const connectDatabase = async() => {
     try {
-        await AppDataSource.initialize();
+        await appDataSource.initialize();
     }
     catch (error) {
         console.log("Error initializing data source", error);

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AppDataSource } from "../data-source";
+import { appDataSource } from "../data-source";
 import { Income } from "../entity/Income";
 import { DeleteResult, InsertResult, UpdateResult } from "typeorm";
 
@@ -7,7 +7,7 @@ import { DeleteResult, InsertResult, UpdateResult } from "typeorm";
 const getIncome = async (req: Request, res: Response, next: NextFunction) => {
     const { incomeId } = req.body;
 
-    await AppDataSource
+    await appDataSource
         .manager.findOne(Income, {
             where: {
                 incomeId
@@ -26,7 +26,7 @@ const getIncomes = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { userId } = req.body;
         
-        await AppDataSource
+        await appDataSource
             .getRepository(Income)
             .find({
                 where: {
@@ -49,7 +49,7 @@ const createIncome = async (req: Request, res: Response, next: NextFunction) => 
 
         let incomeId: string = '';
 
-        await AppDataSource
+        await appDataSource
             .getRepository(Income)
             .insert({
                 userId,
@@ -64,7 +64,7 @@ const createIncome = async (req: Request, res: Response, next: NextFunction) => 
                 incomeId = value.identifiers[0].incomeId;
             });
         
-        await AppDataSource
+        await appDataSource
             .getRepository(Income)
             .findOne({
                 where: {
@@ -88,7 +88,7 @@ const updateIncome = async (req: Request, res: Response, next: NextFunction) => 
     try {
         const { incomeId, amount, source, category, deletedAt } = req.body;
 
-        await AppDataSource
+        await appDataSource
             .createQueryBuilder()
             .update(Income)
             .set({
@@ -115,7 +115,7 @@ const deleteIncome = async (req: Request, res: Response, next: NextFunction) => 
     try {
         const { incomeId } = req.body;
 
-        await AppDataSource
+        await appDataSource
             .getRepository(Income)
             .createQueryBuilder()
             .softDelete()

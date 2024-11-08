@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AppDataSource } from "../data-source";
+import { appDataSource } from "../data-source";
 import { UserAccount } from "../entity/UserAccount";
 import { CheckingAccount } from "../entity/CheckingAccount";
 import { InsertResult, UpdateResult } from "typeorm";
@@ -11,7 +11,7 @@ const createChecking = async (req: Request, res: Response, next: NextFunction) =
 
         let checkingId: string = '';
 
-        const userAccount: UserAccount | null = await AppDataSource
+        const userAccount: UserAccount | null = await appDataSource
             .getRepository(UserAccount)
             .findOne({
                 where: {
@@ -23,7 +23,7 @@ const createChecking = async (req: Request, res: Response, next: NextFunction) =
             res.status(404).json({ message: "Account not found "});
         }
 
-        await AppDataSource
+        await appDataSource
             .createQueryBuilder()
             .insert()
             .into(CheckingAccount)
@@ -40,7 +40,7 @@ const createChecking = async (req: Request, res: Response, next: NextFunction) =
                 checkingId = value.identifiers[0].checkingId;
             });
 
-        await AppDataSource
+        await appDataSource
             .getRepository(CheckingAccount)
             .findOne({
                 where: {
@@ -64,7 +64,7 @@ const getChecking = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { checkingId } = req.body;
         
-        await AppDataSource
+        await appDataSource
             .getRepository(CheckingAccount)
             .findOne({
                 where: {
@@ -88,7 +88,7 @@ const deleteChecking = async (req: Request, res: Response, next: NextFunction) =
     try {
         const { checkingId } = req.body;
 
-        await AppDataSource
+        await appDataSource
             .createQueryBuilder()
             .softDelete()
             .from(CheckingAccount)
@@ -111,7 +111,7 @@ const getCheckings = async (req: Request, res: Response, next: NextFunction) => 
     try {
         const { accountId } = req.body;
 
-        await AppDataSource
+        await appDataSource
             .getRepository(UserAccount)
             .find({
                 where: { accountId },
@@ -134,7 +134,7 @@ const updateChecking = async (req: Request, res: Response, next: NextFunction) =
     try {
         const { checkingId, name, balance, deletedAt } = req.body;
 
-        await AppDataSource
+        await appDataSource
             .createQueryBuilder()
             .update(CheckingAccount)
             .set({

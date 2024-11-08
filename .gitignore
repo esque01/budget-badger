@@ -13,6 +13,8 @@
 /build
 /dist
 /server/dist
+/server/src/keys
+/server/.env
 
 # misc
 .DS_Store

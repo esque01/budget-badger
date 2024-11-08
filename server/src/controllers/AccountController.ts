@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { AppDataSource } from "../data-source";
+import { appDataSource } from "../data-source";
 import { UserAccount } from "../entity/UserAccount";
 import { EntityManager, IsNull, UpdateResult, } from "typeorm";
 import { User } from "../entity/User";
 import { SavingAccount } from "../entity/SavingAccount";
 import { CheckingAccount } from "../entity/CheckingAccount";
+import { generateToken } from "../utils/token-helper";
 
 
 const SALT_ROUNDS: number = 10;
@@ -18,7 +19,7 @@ const createAccount = async (req: Request, res: Response, next: NextFunction): P
         const salt: string = await bcrypt.genSalt(SALT_ROUNDS);
         const hashedPassword: string = await bcrypt.hash(password, salt);
 
-        await AppDataSource
+        await appDataSource
             .transaction(async(entityManager: EntityManager) => {
                 const user: User = new User({
                     firstName,
@@ -50,9 +51,11 @@ const createAccount = async (req: Request, res: Response, next: NextFunction): P
                     user: savedUser
                 });
 
+                const token: string = generateToken(userAccount.user);
+                
                 const savedAccount = await entityManager.save(userAccount);
 
-                return res.status(201).json({ account: savedAccount });
+                return res.status(201).json({ account: savedAccount, token: token });
             });
     } 
     catch (error) {
@@ -65,7 +68,7 @@ const getAccount = async (req: Request, res: Response, next: NextFunction): Prom
     try {
         const { accountId } = req.body;
 
-        await AppDataSource.manager.findOne(UserAccount, {
+        await appDataSource.manager.findOne(UserAccount, {
             where: {
                 accountId
             },
@@ -99,7 +102,7 @@ const deleteAccount = async (req: Request, res: Response, next: NextFunction) =>
 
         const { accountId } = req.body;
 
-        await AppDataSource
+        await appDataSource
         .transaction(async(entityManager: EntityManager) => {
             
             const userAccount: UserAccount | null = await entityManager
@@ -134,7 +137,7 @@ const deleteAccount = async (req: Request, res: Response, next: NextFunction) =>
 
 const getAccounts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        await AppDataSource
+        await appDataSource
             .getRepository(UserAccount)
             .find({
                 where: {
