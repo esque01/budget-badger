@@ -14,6 +14,7 @@
    },
    "dependencies": {
       "@types/bcrypt": "^5.0.2",
+      "@types/twilio": "^3.19.2",
       "bcrypt": "^5.1.1",
       "budget-badger-server": "file:",
       "cors": "^2.8.5",
@@ -25,6 +26,7 @@
       "reflect-metadata": "^0.1.13",
       "server": "file:",
       "sqlite3": "^5.1.7",
+      "twilio": "^5.3.5",
       "typeorm": "0.3.20"
    },
    "scripts": {
