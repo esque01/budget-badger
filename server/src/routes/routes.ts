@@ -1,4 +1,4 @@
-import express, { Request, Response, Router } from "express";
+import express, { Router } from "express";
 import { AccountRoutes, CheckingRoutes, ExpenseRoutes, IncomeRoutes, SavingRoutes, UserRoutes } from "./constants";
 import { login, signup, account, updateAccount } from "../controllers/UserController";
 import { createExpense, deleteExpense, getExpense, getExpenses, updateExpense } from "../controllers/ExpenseController";
@@ -7,7 +7,8 @@ import { createIncome, deleteIncome, getIncome, getIncomes, updateIncome } from 
 import { createSaving, deleteSaving, getSaving, getSavings, updateSaving } from "../controllers/SavingController";
 import { createChecking, deleteChecking, getChecking, getCheckings, updateChecking } from "../controllers/CheckingController";
 import { authRequired } from "../middleware/auth";
-import twilioClient from "../integrations/twilioClient";
+import twilioRequestValidator from "../middleware/twilioRequestValidator";
+import { handleExpense } from "../controllers/TwilioController";
 
 
 const router: Router = express.Router();
@@ -46,17 +47,6 @@ router.post(CheckingRoutes.createChecking, createChecking);
 router.put(CheckingRoutes.updateChecking, authRequired, updateChecking);
 router.delete(CheckingRoutes.deleteChecking, deleteChecking);
 
-router.post('/send-sms', (req: Request, res: Response) => {
-    const { to, body } = req.body;
-  
-    twilioClient.messages
-      .create({
-        body: body,
-        from: process.env.TWILIO_PHONE_NUMBER,
-        to: to
-      })
-      .then(message => res.send(`Message sent with SID: ${message.sid}`))
-      .catch(error => res.status(500).send(error));
-  });
+router.post('/sms/reply', twilioRequestValidator, handleExpense);
 
 export default router;
