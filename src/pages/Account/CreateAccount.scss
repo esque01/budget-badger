@@ -8,12 +8,44 @@
 }
 
 .create-account-header-container {
-    width: 60%;
+    padding: 15px;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+
+@media screen and (min-width: 700px) {
+    .create-account-header-container {
+        width: 90%;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .create-account-header-container {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 1100px) {
+    .create-account-header-container {
+        width: 70%;
+    }
+}
+
+@media screen and (min-width: 1300px) {
+    .create-account-header-container {
+        width: 60%;
+    }
+}
+
+@media screen and (min-width: 1500px) {
+    .create-account-header-container {
+        width: 50%;
+        padding: 20px;
+    }
 }
 
 .create-account-input-container {

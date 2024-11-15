@@ -22,6 +22,20 @@ class UserService {
         }
         return user;
     }
+
+    async getUserByEmail(emailAddress: string): Promise<User> {
+        const user: User | null = await this.userRepository.findOne({
+            where: {
+                emailAddress
+            }
+        });
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+        
+        return user;
+    }
 }
 
 export default UserService;
