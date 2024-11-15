@@ -6,7 +6,9 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import axios from 'axios';
-
+import { useAuth } from '../../context/AuthContext';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 export type LoginFormValues = {
     email: string;
@@ -27,6 +29,20 @@ const loginSchema = yup.object().shape({
 
 export default function Login() {
 
+    const { login, isAuthenticated } = useAuth();
+    const navigate: NavigateFunction = useNavigate();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    
+    useEffect(() => {
+        if (!isAuthenticated) {
+            setIsLoading(false);
+            navigate("/");
+        }
+        else {
+            navigate("/landing");
+        }
+    }, [isAuthenticated, navigate])
+
     const { control, handleSubmit, formState: { errors }, setError } = useForm<LoginFormValues>({
         defaultValues: {
             email: '',
@@ -44,7 +60,7 @@ export default function Login() {
             }
         })
         .then((response) => {
-            console.log(response.data);
+            login(response.data.token);
         })
         .catch((error) => {
             if (error.response.data.message === 'Invalid password')
@@ -54,18 +70,21 @@ export default function Login() {
             console.log('Response status:', error);            
         })
     }
-
+    
+    if (isLoading) {
+        return <div>Loading...</div>
+    }
 
   return (
     <div className='login-container'>
         <Grid container spacing={2} padding={2} justifyContent={'center'}>
-            <Grid size={{ sm: 12 }} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Grid size={{ xs: 12, sm: 12 }} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <Avatar sx={{ backgroundColor: 'teal' }}>
                     <LockOpenRoundedIcon />
                 </Avatar>
                 <Typography variant='h5'>Sign-In</Typography>
             </Grid>
-            <Grid size={{ sm: 8 }}>
+            <Grid size={{ xs: 12, sm: 8 }}>
                 <Controller control={control} name='email' render={({ field: { value, onBlur, onChange }}) => (
                     <TextField 
                      value={value}
@@ -78,7 +97,7 @@ export default function Login() {
                 )}>
                 </Controller>
             </Grid> 
-            <Grid size={{ sm : 8 }}>
+            <Grid size={{ xs: 12, sm : 8 }}>
                 <Controller control={control} name='password' render={({ field: { value, onBlur, onChange }}) => (
                     <TextField 
                      value={value}
@@ -94,15 +113,15 @@ export default function Login() {
                 )}>
                 </Controller>
             </Grid>
-            <Grid size={{ sm: 8 }}>
+            <Grid size={{ xs: 12, sm: 8 }}>
                 <Button fullWidth variant='contained' onClick={handleSubmit(onSubmit)}>Sign In</Button>
             </Grid>
-            <Grid size={8}>
+            <Grid size={{ xs: 12, sm: 8 }}>
                 <div className='reset-create-container'>
                     <Link href="#" variant="body2">
                         Forgot password?
                     </Link>
-                    <Link href="#signup" variant="body2">
+                    <Link href="/signup" variant="body2">
                         Create Account
                     </Link>
                 </div>

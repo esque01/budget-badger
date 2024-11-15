@@ -7,41 +7,25 @@ import { UserAccount } from "../entity/UserAccount";
 import { CheckingAccount } from "../entity/CheckingAccount";
 import { SavingAccount } from "../entity/SavingAccount";
 import { generateToken } from "../utils/token-helper";
-
-
-const SALT_ROUNDS: number = 10;
+import { userServiceInstance } from "../services";
 
 
 const login = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { email, password } = req.body;
-        
-        let userPassword: string | null = null;
 
-        await appDataSource
-            .getRepository(User)
-            .findOne({
-                where: {
-                    emailAddress: email
-                }
-            })
-            .then((value: User | null) =>
-            {
-                if (!value) {
-                    return res.status(404).json({ message: "User not found" });
-                }
-                userPassword = value!.password;
-            });
+        const user: User = await userServiceInstance.getUserByEmail(email);
+        const matchSuccess: boolean  = await bcrypt.compare(password, user.password);
 
-        const passwordHash: string = userPassword!;
-        
-        await bcrypt.compare(password, passwordHash)
-            .then((matchSuccess: boolean) => {
-                if (!matchSuccess) {
-                    return res.status(401).json({ message: "Invalid password" });
-                }
-                return res.status(200).json({ message: "Login success" });
-            });
+        if (!matchSuccess) {
+            res.status(401).json({ message: "Invalid password" });
+        }
+
+        const token: string = generateToken(user);
+
+        const { userId, firstName, middleName, lastName, emailAddress, phoneNumber, role } = user;
+
+        res.status(200).json({token, user: { userId, role, firstName, middleName, lastName, emailAddress, phoneNumber }});
     } 
     catch (error: any) {
         next(error);
@@ -50,6 +34,9 @@ const login = async(req: Request, res: Response, next: NextFunction): Promise<vo
 
 
 const signup = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    
+    const SALT_ROUNDS: number = 10;
+
     try {
         const {
             firstName, 

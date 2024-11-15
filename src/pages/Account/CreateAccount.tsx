@@ -60,7 +60,7 @@ export default function CreateAccount() {
             </Typography>
             <div className='create-account-input-container'>
                 <Grid container spacing={2}>
-                    <Grid size={6}>
+                    <Grid size={{ xs: 12, sm: 12, md: 12 }}>
                         <Controller control={control} name='firstName' render={({ field: { value, onBlur, onChange }, formState: { errors } }) => (
                             <TextField
                                 value={value}
@@ -78,7 +78,7 @@ export default function CreateAccount() {
                             ></TextField>
                         )}></Controller>
                     </Grid>
-                    <Grid size={6}>
+                    <Grid size={{ xs: 12, sm: 12, md: 12 }}>
                         <Controller control={control} name='lastName' render={({ field: { value, onBlur, onChange }, formState: { errors } }) => (
                             <TextField
                                 value={value}
@@ -96,7 +96,7 @@ export default function CreateAccount() {
                         )}>
                         </Controller>
                     </Grid>
-                    <Grid size={12}>
+                    <Grid size={{ xs: 12, sm: 12, md: 12 }}>
                         <Controller control={control} name='email' render={({ field: { value, onBlur, onChange }, formState: { errors }} ) => (
                             <TextField 
                                 value={value}
@@ -114,7 +114,7 @@ export default function CreateAccount() {
                         )}>
                         </Controller>
                     </Grid>
-                    <Grid size={6}>
+                    <Grid size={{ xs: 12, sm: 12, md: 12 }}>
                         <Controller control={control} name='password' render={({field: { value, onBlur, onChange }, formState: { errors }}) => (
                             <TextField
                                 value={value}
@@ -133,7 +133,7 @@ export default function CreateAccount() {
                         )}>
                         </Controller>
                     </Grid>
-                    <Grid size={6}>
+                    <Grid size={{ xs: 12, sm: 12 }}>
                         <Controller control={control} name='confirmPassword' render={({ field: { value, onBlur, onChange }, formState: { errors }}) => (
                             <TextField
                                 value={value}
@@ -156,8 +156,8 @@ export default function CreateAccount() {
                         <Button fullWidth variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>SIGN UP</Button>
                     </Grid>
                     <Grid container size={12}>
-                        <Grid size={12}>
-                            <Link href="#" variant="body2">
+                        <Grid size={{ xs: 12, sm: 12 }}>
+                            <Link href="/" variant="body2">
                                 Already Have An Account? Sign In
                             </Link>
                         </Grid>
