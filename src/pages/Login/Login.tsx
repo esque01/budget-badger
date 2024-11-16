@@ -29,7 +29,7 @@ const loginSchema = yup.object().shape({
 
 export default function Login() {
 
-    const { login, isAuthenticated } = useAuth();
+    const { isAuthenticated, setIsAuthenticated } = useAuth();
     const navigate: NavigateFunction = useNavigate();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     
@@ -54,21 +54,24 @@ export default function Login() {
 
     const onSubmit: SubmitHandler<LoginFormValues> = async(data: LoginFormValues) => 
     {
-        await axios.post('http://localhost:5000/api/v1/login', data, {
-            headers: {
-                'Content-Type': 'application/json',
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/login', data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true
+            });
+            if (response.status === 200) {
+                setIsAuthenticated(true);
+                navigate("/landing");
             }
-        })
-        .then((response) => {
-            login(response.data.token);
-        })
-        .catch((error) => {
-            if (error.response.data.message === 'Invalid password')
-            {
+        } 
+        catch (error: any) {
+            if (error.response.data.message === 'Invalid password') {
                 setError("password", { message: "Invalid password" });
             }
-            console.log('Response status:', error);            
-        })
+            console.log('Response status:', error);        
+        }
     }
     
     if (isLoading) {

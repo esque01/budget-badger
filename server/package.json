@@ -14,9 +14,12 @@
    },
    "dependencies": {
       "@types/bcrypt": "^5.0.2",
+      "@types/body-parser": "^1.19.5",
+      "@types/cookie-parser": "^1.4.7",
       "@types/twilio": "^3.19.2",
       "bcrypt": "^5.1.1",
       "budget-badger-server": "file:",
+      "cookie-parser": "^1.4.7",
       "cors": "^2.8.5",
       "crypto": "^1.0.1",
       "dotenv": "^16.4.5",

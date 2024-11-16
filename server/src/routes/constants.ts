@@ -1,5 +1,10 @@
+export const AuthRoutes = {
+    checkAuth: '/check-auth',
+};
+
 export const UserRoutes = {
     login: '/login',
+    logout: '/logout',
     signup: '/signup',
     account: '/account',
 };
