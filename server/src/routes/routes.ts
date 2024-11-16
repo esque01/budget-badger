@@ -1,6 +1,6 @@
 import express, { Router } from "express";
-import { AccountRoutes, CheckingRoutes, ExpenseRoutes, IncomeRoutes, SavingRoutes, UserRoutes } from "./constants";
-import { login, signup, account, updateAccount } from "../controllers/UserController";
+import { AccountRoutes, AuthRoutes, CheckingRoutes, ExpenseRoutes, IncomeRoutes, SavingRoutes, UserRoutes } from "./constants";
+import { login, signup, account, updateAccount, logout } from "../controllers/UserController";
 import { createExpense, deleteExpense, getExpense, getExpenses, updateExpense } from "../controllers/ExpenseController";
 import { createAccount, deleteAccount, getAccount, getAccounts } from "../controllers/AccountController";
 import { createIncome, deleteIncome, getIncome, getIncomes, updateIncome } from "../controllers/IncomeController";
@@ -9,6 +9,7 @@ import { createChecking, deleteChecking, getChecking, getCheckings, updateChecki
 import { authRequired } from "../middleware/auth";
 import twilioRequestValidator from "../middleware/twilioRequestValidator";
 import { handleExpense } from "../controllers/TwilioController";
+import { checkAuth } from "../controllers/AuthController";
 
 
 const router: Router = express.Router();
@@ -16,7 +17,9 @@ const router: Router = express.Router();
 router.post(UserRoutes.signup, signup);
 router.get(UserRoutes.account, authRequired, account);
 router.post(UserRoutes.login, login);
+router.post(UserRoutes.logout, logout);
 router.put(UserRoutes.account, authRequired, updateAccount);
+router.get(AuthRoutes.checkAuth, checkAuth);
 
 router.post(ExpenseRoutes.createExpense, authRequired, createExpense);
 router.get(ExpenseRoutes.getExpense, authRequired, getExpense);

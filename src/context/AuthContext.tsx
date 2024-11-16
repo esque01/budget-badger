@@ -1,12 +1,11 @@
+import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
 
 interface AuthContextProps {
     isAuthenticated: boolean;
-    token: string | null;
-    login: (token: string) => void;
     logout: () => void;
-    refreshAuthToken?: () => Promise<void>;  
+    setIsAuthenticated: (value: boolean) => void;
 };
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -16,26 +15,44 @@ interface AuthProviderProps {
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-    const [token, setToken] = useState<string | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
-        const localToken: string | null = localStorage.getItem("authToken");
-        if (localToken) {
-            setToken(localToken);   
+        const storedAuthState = sessionStorage.getItem("isAuthenticated"); 
+        if (storedAuthState === 'true') {
+            setIsAuthenticated(true);
+        }
+        else {
+            checkAuthStatus();
         }
     }, []);
 
-    const login = (newToken: string) => {
-        setToken(newToken);
-        localStorage.setItem("authToken", newToken);
+
+    const checkAuthStatus = async() => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/v1/check-auth', { withCredentials: true });
+            if (response.data.isAuthenticated) {
+                setIsAuthenticated(true);
+                sessionStorage.setItem("isAuthenticated", "true");
+            }
+            else {
+                setIsAuthenticated(false);
+                sessionStorage.removeItem("isAuthenticated");
+            }
+        } 
+        catch (error) {
+            setIsAuthenticated(false);
+            sessionStorage.removeItem("isAuthenticated");
+        }
+    };
+
+    const logout = async() => {
+        await axios.post('http://localhost:5000/api/v1/logout', {}, { withCredentials: true });
+        setIsAuthenticated(false);
+        sessionStorage.removeItem("isAuthenticated");
     }
 
-    const logout = () => {
-        setToken(null);
-        localStorage.removeItem("authToken");
-    }
-
-    const authContextValue: AuthContextProps = { isAuthenticated: !!token, token, login, logout }
+    const authContextValue: AuthContextProps = { isAuthenticated, logout, setIsAuthenticated }
 
     return (
         <AuthContext.Provider value={authContextValue}>

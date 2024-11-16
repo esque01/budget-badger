@@ -23,14 +23,38 @@ const login = async(req: Request, res: Response, next: NextFunction): Promise<vo
 
         const token: string = generateToken(user);
 
+        res.cookie('session_token', token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000,
+        });
+
         const { userId, firstName, middleName, lastName, emailAddress, phoneNumber, role } = user;
 
-        res.status(200).json({token, user: { userId, role, firstName, middleName, lastName, emailAddress, phoneNumber }});
+        res.status(200).json({ user: { userId, role, firstName, middleName, lastName, emailAddress, phoneNumber }});
     } 
     catch (error: any) {
         next(error);
     }
 }
+
+
+const logout = async(req: Request, res: Response, next: NextFunction) => {
+    try {
+        res.clearCookie('session_token', {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+            path: "/"
+        });
+
+        res.status(204).json({ message: "User logged out successfully" });
+    }
+    catch (error) {
+        next(error);
+    }
+}  
 
 
 const signup = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -173,4 +197,4 @@ const updateAccount = async(req: Request, res: Response, next: NextFunction) => 
    }
 }
 
-export { signup, login, account, updateAccount };
+export { signup, login, logout, account, updateAccount };
